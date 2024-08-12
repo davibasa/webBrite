@@ -79,7 +79,7 @@ const QrCode = () => {
 
   }
   return (
-    <div className='w-full bg-gradient-to-br from-white to-gray-200 md:px-44 py-10 flex items-center justify-center '>
+    <div className='w-full bg-gradient-to-br from-white to-gray-200 md:px-36 py-10 flex items-center justify-center'>
       <div className='md:max-w-[1400px] grid lg:grid-cols-2 m-auto max-w-[520px] lg:gap-44'>
         <div className="flex flex-col justify-center lg:justify-start">
           <h1 className='text-4xl md:text-6xl font-bold text-center md:text-left'>Experimente a <span className='text-brite'>Tecnologia Inovadora </span> da <span className='text-brite'>Brite</span> Agora!</h1>
@@ -122,8 +122,8 @@ const QrCode = () => {
         <div className='flex justify-center py-8 md:py-0'>
           <div className='bg-white w-[340px] md:w-[400px] flex flex-col justify-center items-center rounded-xl p-4 shadow-2xl'>
             {isLoading ? (
-              <div className='flex justify-center items-center'>
-                <div className='h-52 w-52 border-8 border-l-gray-200 border-r-gray-200 border-b-gray-200 border-t-brite animate-spin ease-linear rounded-full'></div>
+              <div className='flex justify-center items-center py-10'>
+                <div className='h-60 w-60 inline-block border-solid border-current border-8 border-l-gray-200 border-r-gray-200 border-b-gray-200 border-t-brite animate-spin ease-linear rounded-full'></div>
               </div>
             ): (
               <>
