@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from 'react';
 import io from "socket.io-client";
-import { MdQrCodeScanner } from "react-icons/md";
 import { QRCode } from "react-qr-code";
+import { FaRegCircleCheck } from "react-icons/fa6";
+
 const socket = io.connect("https://whatsappapiserver-w1rr.onrender.com", {});
 
 const QrCode = () => {
@@ -109,23 +110,16 @@ const QrCode = () => {
 
             <button 
               onClick={createSessionForWhatsapp}
-              className='border bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
-              text-white shadow-2xl rounded-lg px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:bg-indigo-950 active:text-gray-200'>
-              Gerar QrCode
+              disabled={isLoading}
+              className={`border bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
+              text-white shadow-2xl rounded-lg px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:bg-indigo-950 active:text-gray-200 ${isLoading ? 'opacity-35 cursor-not-allowed' : ''}`}>
+              {isLoading ? 'Carregando...' : 'Gerar QrCode'}
             </button>
 
           </div>
-
-          <div style={{
-            marginBottom: '24px'
-          }}>
-            {
-              id !== '' && <h1>Conectado</h1>
-            }
-          </div>
         </div>
 
-        <div className='flex justify-center'>
+        <div className='flex justify-center py-8 md:py-0'>
           <div className='bg-white w-[340px] md:w-[400px] flex flex-col justify-center items-center rounded-xl p-4 shadow-2xl'>
             {isLoading ? (
               <div className='flex justify-center items-center'>
@@ -173,9 +167,22 @@ const QrCode = () => {
               </div>
               </>
             )}
+
             <div>
-              <h1 className='pt-6 font-bold md:text-lg text-center'>Transforme o Atendimento ao Paciente escaneando o QrCode Acima</h1>
-              <p className='text-gray-400 text-sm md:text-base font-semibold text-center py-2'>Clique no Botão e Tenha acesso a automatição do agendamento, relátorios e mais</p>
+              {id !== '' ? (
+                <div className='flex items-center gap-2'>
+                  <FaRegCircleCheck 
+                    size={30}
+                    style={{color: '#6363EF'}}
+                  />
+                  <h1 className='text-xl md:text-4xl text-center font-bold text-brite py-4'>Conectado</h1>
+                </div>
+              ) : (
+                <>
+                <h1 className='pt-6 font-bold md:text-lg text-center'>Transforme o Atendimento ao Paciente escaneando o QrCode Acima</h1>
+                <p className='text-gray-400 text-sm md:text-base font-semibold text-center py-2'>Clique no Botão e Tenha acesso a automatição do agendamento, relátorios e mais</p>
+                </>
+              )}
             </div>
           </div>
         </div>
