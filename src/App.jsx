@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import { Navbar, Login, Master, Register, QrCode, NotFound } from './components';
+import { Navbar, Login, Master, Register, QrCode, NotFound, Forms } from './components';
 
 const App = () => {
   return (
@@ -9,6 +9,7 @@ const App = () => {
     <Routes>
       <Route path='/' element={ <Master /> }>
         <Route index element={ <QrCode /> } />
+        <Route path='/dashboard' element={ <Forms /> }/>
       </Route>
       <Route path="/login" element={ <Login /> } />
       <Route path="*" element={ <NotFound /> } />
