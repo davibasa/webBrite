@@ -44,15 +44,14 @@ const QrCode = () => {
     socket.on("qr", (data) => {
       const { qr } = data; 
       console.log("QR RECEIVED", qr)
-      setQrCode(qr);
-      setIsLoading(false);
+      setQrCode(qr);  // Atualiza o estado do QR code com o valor recebido
+      setIsLoading(false);  // Para o loading
     })
     
     socket.on("ready", (data) => {
       console.log(data);
       const {id} = data;
       setId(id);
-      
     })
 
     socket.on('allChats', (data) => {
@@ -110,9 +109,9 @@ const QrCode = () => {
 
             <button 
               onClick={createSessionForWhatsapp}
-              disabled={isLoading}
+              disabled={isLoading || !session}
               className={`border bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
-              text-white shadow-2xl rounded-lg px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:bg-indigo-950 active:text-gray-200 ${isLoading ? 'opacity-35 cursor-not-allowed' : ''}`}>
+              text-white shadow-2xl rounded-lg px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:bg-indigo-950 active:text-gray-200 ${isLoading || !session ? 'opacity-45 cursor-not-allowed' : ''}`}>
               {isLoading ? 'Carregando...' : 'Gerar QrCode'}
             </button>
 
@@ -123,7 +122,7 @@ const QrCode = () => {
           <div className='bg-white w-[340px] md:w-[400px] flex flex-col justify-center items-center rounded-xl p-4 shadow-2xl'>
             {isLoading ? (
               <div className='flex justify-center items-center py-10'>
-                <div className='h-60 w-60 inline-block border-solid border-current border-8 border-l-gray-200 border-r-gray-200 border-b-gray-200 border-t-brite animate-spin ease-linear rounded-full'></div>
+                <div className='h-52 w-52 border-8 border-l-gray-200 border-r-gray-200 border-b-gray-200 border-t-brite animate-spin ease-linear rounded-full'></div>
               </div>
             ): (
               <>
@@ -138,13 +137,6 @@ const QrCode = () => {
                     size={320} // Size of the QR code
                     level="H" // Error correction level
                   />
-                  {/* <MdQrCodeScanner
-                    value={qrCode}
-                    style={{
-                      color: 'white',
-                    }}
-                    className='opacity-75'
-                    size='320px' /> */}
               </div>
               <div className='md:hidden rounded-xl px-3 md:px-6 py-12 md:py-10'
                   style={{
@@ -157,13 +149,6 @@ const QrCode = () => {
                     size={280} // Size of the QR code
                     level="H" // Error correction level
                   />
-                    {/* <MdQrCodeScanner
-                      value={qrCode}
-                      style={{
-                        color: 'white',
-                      }}
-                      className='opacity-75'
-                      size='280px' /> */}
               </div>
               </>
             )}
