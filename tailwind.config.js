@@ -11,9 +11,11 @@ export default {
         'brite-hover': '#5C5CD8',
         'brite-active': '#4141B3'
       },
-      
       fontFamily: {
         fontBrite: 'DM-Sans'
+      },
+      gridTemplateColumns : {
+        "1/5": "1fr 5fr"
       }
     },
   },

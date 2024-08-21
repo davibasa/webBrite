@@ -4,11 +4,14 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import reportWebVitals from './reportWebVitals.js';
+import ContextWrapper from './context/ContextWrapper.jsx'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <App />
+    <ContextWrapper>
+      <App />
+    </ContextWrapper>
   </BrowserRouter>,
 );
 
