@@ -78,40 +78,42 @@ const QrCode = () => {
 
   }
   return (
-    <div className='w-full bg-gradient-to-br from-white to-gray-200 md:px-36 py-10 flex items-center justify-center'>
+    <div className='w-full bg-gradient-to-br from-white to-gray-200 px-4 xl:px-36 md:px-10 py-8 flex items-center justify-center md:h-screen xl:h-auto'>
       <div className='md:max-w-[1400px] grid lg:grid-cols-2 m-auto max-w-[520px] lg:gap-44'>
         <div className="flex flex-col justify-center lg:justify-start">
-          <h1 className='text-4xl md:text-6xl font-bold text-center md:text-left'>Experimente a <span className='text-brite'>Tecnologia Inovadora </span> da <span className='text-brite'>Brite</span> Agora!</h1>
-          <h2 className='md:w-[500px] py-6 md:py-8 md:text-lg font-semibold text-gray-400 text-center md:text-left'>Abra o Whatsapp e escaneie o QR code e veja como nossa solução de IA automatiza o suporte ao paciente e os agendamentos via WhatsApp.</h2>
+          <h1 className='text-4xl md:text-6xl font-bold text-center lg:text-left'>Experimente a <span className='text-brite'>Tecnologia Inovadora </span> da <span className='text-brite'>Brite</span> Agora!</h1>
+          <h2 className='lg:w-[500px] py-6 md:py-8 md:text-xl font-semibold text-gray-400 text-center lg:text-left'>Abra o Whatsapp e escaneie o QR code e veja como nossa solução de IA automatiza o suporte ao paciente e os agendamentos via WhatsApp.</h2>
           
-          <div className="flex items-center ml-2 md:ml-0 gap-4">
-            <form onSubmit={handleSubmit} method="POST" className='shadow-xl'>
-                <div className='flex-col'>
-                  <input
-                    id="text"
-                    name="text"
-                    type="text"
-                    value={session}
-                    onChange={handleInputChange}
-                    required
-                    placeholder='Ex de sessão: Clínica_1'
-                    autoComplete="text"
-                    className={`block form-input w-full md:px-16 rounded-md border-0 shadow-sm ring-1 ring-inset placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none ${error ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500' : 'ring-gray-300 focus:ring-to-brite'}`}
-                  />
-                  {/* Exibe a mensagem de erro, se houver */}
-                  {error && (
-                    <p className="text-red-500 text-sm mt-2 absolute">
-                      {error}
-                    </p>
-                  )}                  
-                </div>
-            </form>
+          <div className="flex items-center flex-col md:flex-row lg:w-[500px] justify-center lg:justify-start gap-2 pb-4 md:pb-8">
+            <div className='py-3 md:py-0'>
+              <form onSubmit={handleSubmit} method="POST" className='shadow-xl'>
+                  <div className='flex-col'>
+                    <input
+                      id="text"
+                      name="text"
+                      type="text"
+                      value={session}
+                      onChange={handleInputChange}
+                      required
+                      placeholder='Ex de sessão: Clínica_1'
+                      autoComplete="text"
+                      className={`block form-input w-full px-20 md:px-14 rounded-md border-0 shadow-sm ring-1 ring-inset placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none ${error ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500' : 'ring-gray-300 focus:ring-to-brite'}`}
+                    />
+                    {/* Exibe a mensagem de erro, se houver */}
+                    {error && (
+                      <p className="text-red-500 text-sm mt-2 absolute">
+                        {error}
+                      </p>
+                    )}                  
+                  </div>
+              </form>
+            </div>
 
             <button 
               onClick={createSessionForWhatsapp}
               disabled={isLoading || !session}
-              className={`border bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
-              text-white shadow-2xl rounded-lg px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:bg-indigo-950 active:text-gray-200 ${isLoading || !session ? 'opacity-45 cursor-not-allowed' : ''}`}>
+              className={`border px-28 bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
+              text-white shadow-2xl rounded-lg md:px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold ${isLoading || !session ? 'opacity-45 cursor-not-allowed' : ''}`}>
               {isLoading ? 'Carregando...' : 'Gerar QrCode'}
             </button>
 
