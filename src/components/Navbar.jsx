@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleClick = () => setToggle(!toggle);
   const closeMenu = () => {
     setToggle(false);
-    navigate("/");
+    navigate("/home");
   }
   const navigate = useNavigate();
 

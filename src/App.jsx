@@ -6,35 +6,23 @@ import PrivateRoute from './components/PrivateRoute'; // Importa o componente Pr
 
 const App = () => {
   return (
-    <>
-      <Routes>
-        {/* Rotas protegidas */}
-        <Route path="/" element={<Master />}>
-          <Route index element={<QrCode />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Forms />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/calendar"
-            element={
-              <PrivateRoute>
-                <Calendar />
-              </PrivateRoute>
-            }
-          />
-        </Route>
+    <Routes>
+      {/* Rotas públicas */}
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<NotFound />} />
+      <Route path="/" element={<Master />}>
+        <Route path="/calendar" element={<Calendar />} />
+      </Route>
 
-        {/* Rotas públicas */}
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </>
+      {/* Rotas protegidas */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<Master />}>
+          <Route path="/home" element={<QrCode />} />
+          <Route path="/dashboard" element={<Forms />} />
+        </Route>
+      </Route>
+    </Routes>
   );
 };
 
