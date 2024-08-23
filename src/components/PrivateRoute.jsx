@@ -1,11 +1,12 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 // Componente para verificar a autenticação
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = () => {
   const isAuthenticated = !!localStorage.getItem('tokenUsuario'); // Verifica se o token está no localStorage
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  // Se autenticado, renderiza as rotas privadas, caso contrário redireciona para login
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default PrivateRoute;
