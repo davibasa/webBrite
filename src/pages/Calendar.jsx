@@ -284,7 +284,7 @@ const Calendly = () => {
                     key={idx}
                     className="w-full py-2 font-semibold animated-background hover:bg-gradient-to-r hover:from-brite
                       hover:via-indigo-400 hover:to-indigo-600 text-brite border-2 border-brite rounded-md text-lg
-                      hover:text-white focus:outline-none hover:border-transparent active:bg-indigo-950 active:text-gray-300"
+                      hover:text-white focus:outline-none hover:border-transparent active:bg-indigo-950 active:text-gray-300 shadow-md"
                   >
                     {format(time, "HH:mm")}
                   </button>
