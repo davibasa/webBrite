@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './index.css';
-import { Login, Master, Register, QrCode, NotFound, Forms, Calendar } from './components';
+import { Login, Master, Register, QrCode, NotFound, Forms, Calendar, MasterPublic } from './components';
 import PrivateRoute from './components/PrivateRoute'; // Importa o componente PrivateRoute
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<NotFound />} />
-      <Route path="/" element={<Master />}>
+      <Route path="/" element={<MasterPublic />}>
         <Route path="/calendar" element={<Calendar />} />
       </Route>
 

@@ -115,7 +115,7 @@ const Register = () => {
               <p className="text-center text-sm text-gray-500">
                 Já possui Conta?{""}
                 <Link
-                  to="/login"
+                  to="/"
                   className="font-semibold leading-6 text-brite hover:text-brite-hover pl-2"
                 >
                   Entrar

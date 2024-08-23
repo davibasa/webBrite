@@ -23,7 +23,7 @@ const NavbarPublic = () => {
     <div className="sticky top-0 w-full h-[80px] z-50 animated-background bg-gradient-to-r from-[#6363EF] via-[#6363EF] to-indigo-500">
       <div className="md:max-w-[1400px] max-w-[520px] m-auto w-full h-full flex items-center justify-center md:px-4 px-4">
 
-        <div className="flex-1 justify-center items-center">
+        <div className="justify-center items-center">
           <button onClick={() => navigate("/")}>
             <img src={logo} className="h-[45px] cursor-pointer" />
           </button>

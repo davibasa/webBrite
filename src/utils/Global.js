@@ -3,8 +3,8 @@
 class Global {
     // Propriedades estáticas para URLs da API
     static Api = "";
-    static MinApi = "https://localhost:7142/minapi";
-    // static MinApi = "https://minimalapiteko.azurewebsites.net/minapi";
+    //static MinApi = "https://localhost:7142/minapi";
+    static MinApi = "https://minimalapibrite.azurewebsites.net/minapi";
   
     // Método estático para adicionar cabeçalhos à requisição HTTP
     static async addHeaders(client, localStorage, parameters = {}) {

@@ -10,4 +10,4 @@ import Calendar from "../pages/Calendar";
 import MasterPublic from "./MasterPublic";
 import NavbarPublic from "./NavbarPublic";
 
-export { Navbar, Footer, Master, Login , Register, QrCode, NotFound, Forms, Calendar, Master, NavbarPublic };
+export { Navbar, Footer, Master, Login , Register, QrCode, NotFound, Forms, Calendar, MasterPublic, NavbarPublic };
