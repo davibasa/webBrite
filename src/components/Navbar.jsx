@@ -8,24 +8,26 @@ import { BsPersonCircle } from "react-icons/bs";
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const handleClick = () => setToggle(!toggle);
+
   const closeMenu = () => {
     setToggle(false);
     navigate("/home");
   }
+
   const navigate = useNavigate();
 
   const navigateCloseMenu = (path) => {
     navigate(path);
-    closeMenu();
+    setToggle(false);
   };
 
   return (
-    <div className="sticky top-0 w-full h-[80px] z-50 animated-background bg-gradient-to-r from-[#6363EF] via-[#6363EF] to-indigo-500">
-      <div className="md:max-w-[1400px] max-w-[520px] m-auto w-full h-full flex items-center justify-center md:px-4 px-4">
+    <div className="sticky top-0 w-full h-[80px] z-50 animated-background bg-gradient-to-r from-[#6363EF] via-[#6363EF] to-indigo-600">
+      <div className="md:max-w-[1400px] max-w-[520px] m-auto w-full h-full flex items-center justify-between px-6 md:px-2">
 
         <div className="justify-center items-center">
           <button onClick={() => navigate("/")}>
-            <img src={logo} className="h-[45px] cursor-pointer" />
+            <img src={logo} className="h-[35px] cursor-pointer" />
           </button>
         </div>
 
@@ -76,9 +78,9 @@ const Navbar = () => {
 
         <div className="md:hidden" onClick={handleClick}>
           {toggle ? (
-            <RxCross2 style={{ color: "white" }} size={25} />
+            <RxCross2 style={{ color: "white" }} size={30} />
           ) : (
-            <RxHamburgerMenu style={{ color: "white" }} size={25} />
+            <RxHamburgerMenu style={{ color: "white" }} size={30} />
           )}
         </div>
       </div>
@@ -86,23 +88,24 @@ const Navbar = () => {
       <div
         className={
           toggle
-            ? "absolute z-10 p-4 bg-brite w-full px-8 md:hidden border-b"
+            ? "absolute z-10 w-full animated-background bg-gradient-to-r from-[#6363EF] via-[#6363EF] to-indigo-600 md:hidden border-b-2 border-t-2 border-indigo-500"
             : "hidden"
         }
       >
-        <div className="">
-          <button className="flex w-full p-3 text-white hover:text-gray-200 active:text-gray-300 hover:bg-brite-hover focus:outline-none">
-            <Link to="hero" duration={500} smooth={true} onClick={closeMenu}>
-              Home
-            </Link>
+        <div className="flex flex-col items-center justify-center gap-4 p-6">
+          <button 
+            className="py-3 text-lg text-white hover:text-gray-200 active:text-gray-300 w-full focus:outline-none"
+            onClick={closeMenu}
+          >
+            Home
           </button>
           <button
-            onClick={() => navigateCloseMenu("/pricing")}
-            className="flex w-full p-3 text-white hover:text-gray-200 active:text-gray-300 hover:bg-brite-hover focus:outline-none"
+            onClick={() => navigateCloseMenu("/dashboard")}
+            className="w-full py-3 text-lg text-white hover:text-gray-200 active:text-gray-300 hover:bg-brite-hover focus:outline-none"
           >
-            Preços
+            Relatórios 
           </button>
-          <button className="flex w-full p-3 text-white hover:text-gray-200 active:text-gray-300 hover:bg-brite-hover focus:outline-none">
+          {/* <button className="flex w-full p-3 text-white hover:text-gray-200 active:text-gray-300 hover:bg-brite-hover focus:outline-none">
             <Link
               to="benefits"
               duration={650}
@@ -116,7 +119,7 @@ const Navbar = () => {
             <Link to="faq" duration={800} smooth={true} onClick={closeMenu}>
               Dúvidas
             </Link>
-          </button>
+          </button> */}
 
           {/* <div className="flex flex-col my-3 gap-3">
             <button
