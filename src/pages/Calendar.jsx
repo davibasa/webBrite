@@ -135,7 +135,7 @@ const Calendly = () => {
   const timeService = generateAvailableTimes(30);
 
   return (
-    <div className="w-full bg-gradient-to-br from-white to-gray-200 py-14 px-6 flex items-center justify-center">
+    <div className="w-full bg-gradient-to-br from-white to-gray-200 py-14 px-6 flex items-center md:h-screen justify-center">
       <div
         className={`${
           showTimes ? "md:grid-cols-3" : "md:grid-cols-2"

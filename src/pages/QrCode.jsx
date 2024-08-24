@@ -78,7 +78,7 @@ const QrCode = () => {
 
   }
   return (
-    <div className='w-full bg-gradient-to-br from-white to-gray-200 px-4 xl:px-36 md:px-10 py-8 flex items-center justify-center md:h-screen xl:h-auto'>
+    <div className='w-full bg-gradient-to-br from-white to-gray-200 px-4 xl:px-36 md:px-10 py-8 xl:pb-16 flex items-center justify-center md:h-screen'>
       <div className='md:max-w-[1400px] grid lg:grid-cols-2 m-auto max-w-[520px] lg:gap-44'>
         <div className="flex flex-col justify-center lg:justify-start">
           <h1 className='text-4xl md:text-6xl font-bold text-center lg:text-left'>Experimente a <span className='text-brite'>Tecnologia Inovadora </span> da <span className='text-brite'>Brite</span> Agora!</h1>
