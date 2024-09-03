@@ -1,33 +1,45 @@
 // src/utils/Global.js
+import { Buffer } from "buffer";
 
 class Global {
     // Propriedades estáticas para URLs da API
-    static Api = "";
+    static Api = "https://apibrite.azurewebsites.net/api";
     //static MinApi = "https://localhost:7142/minapi";
     static MinApi = "https://minimalapibrite.azurewebsites.net/minapi";
   
     // Método estático para adicionar cabeçalhos à requisição HTTP
     static async addHeaders(client, localStorage, parameters = {}) {
       try {
-        const savedToken = await Global.readLocalStorage(localStorage, "JwtToken");
+        const savedToken = await Global.readLocalStorage(localStorage, "tokenUsuario");
   
-        if (!client.headers.has("Authorization")) {
-          client.headers.append("Authorization", `Bearer ${savedToken}`);
+        // Verificação adicional: garantir que o token não é nulo
+        if (!savedToken || savedToken === "tokenUsuario") {
+          throw new Error("Token JWT não encontrado no localStorage");
+        }
+        console.log(savedToken);
+
+        if (!client.defaults.headers) {
+          client.defaults.headers = {};
+        }
+
+        if (!client.defaults.headers["Authorization"]) {
+          client.defaults.headers["Authorization"] = `Bearer ${savedToken}`;
         }
   
         const claimValue = Global.getClaimFromToken(savedToken, "http://schemas.customclaims.com/hash");
   
-        if (claimValue && !client.headers.has("tenant")) {
-          client.headers.append("tenant", claimValue);
+        if (claimValue && !client.defaults.headers["tenant"]) {
+          client.defaults.headers["tenant"] = claimValue;
         }
   
         for (const [key, value] of Object.entries(parameters)) {
-          if (!client.headers.has(key)) {
-            client.headers.append(key, value);
-          } else {
-            client.headers.delete(key);
-            client.headers.append(key, value);
-          }
+          client.defaults.headers[key] = value;
+          // if (!client.headers.has(key)) {
+          //   client.headers.append(key, value);
+          // } else {
+          //   client.headers.delete(key);
+          //   client.headers.append(key, value);
+          // }
         }
   
         return true;
@@ -39,28 +51,69 @@ class Global {
   
     // Método estático para ler do localStorage
     static async readLocalStorage(localStorage, item) {
-      const savedToken = await localStorage.getItem(item);
-      return savedToken ?? item;
-    }
+      try {
+        const savedToken = await localStorage.getItem(item);
+        return savedToken ?? item;
+      } catch (error) {
+        console.error("Erro ao ler do localStorage:", error);
+        return null;
+      }
+    } 
   
     // Método estático para obter uma claim do token JWT
     static getClaimFromToken(token, claimType) {
       try {
-        const jwtToken = JSON.parse(atob(token.split('.')[1]));
+
+        // Verifica se o token é válido e se é uma string
+        if (!token || typeof token !== 'string') {
+          throw new Error("Token inválido ou indefinido");
+        }
+
+        // Divide o token e verifica se está no formato JWT válido (contendo três partes)
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+          throw new Error("Token JWT não está no formato correto");
+        }
+
+        const base64Payload = parts[1];
+
+        if (!base64Payload) {
+          throw new Error("Payload do token indefinido");
+        }
+        
+        // const decodePayload = Buffer.from(base64Payload, 'based64').toString('uft-8');
+
+        let decodedPayload;
+        if (typeof Buffer !== 'undefined') {
+          // Para Node.js
+          decodedPayload = Buffer.from(base64Payload, 'base64').toString('utf-8');
+        } else {
+          // Para o navegador
+          decodedPayload = atob(base64Payload);
+        }
+
+        const jwtToken = JSON.parse(decodedPayload);
+
         return jwtToken[claimType] || null;
-      } catch (error) {
-        console.error("Erro ao obter claim do token:", error);
-        return null;
-      }
+      //   const jwtToken = JSON.parse(atob(token.split('.')[1]));
+      //   return jwtToken[claimType] || null;
+      // } catch (error) {
+      //   console.error("Erro ao obter claim do token:", error);
+      //   return null;
+      // }
+    } catch (error) {
+      console.error("Error ao obter claim ao token:", error);
+      return null;
     }
+  }
   
     // Método estático para verificar a expiração do token
     static async verificaExpiracaoLogin(token = "", localStorage = null) {
       if (!token) {
-        token = await Global.readLocalStorage(localStorage, "JwtToken");
+        token = await Global.readLocalStorage(localStorage, "tokenUsuario");
       }
   
-      if (token === "JwtToken") {
+      if (token === "tokenUsuario") {
         return true;
       }
   

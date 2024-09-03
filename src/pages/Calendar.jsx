@@ -28,6 +28,11 @@ import {
 } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
+import { useParams } from "react-router-dom";
+import Modal from "../components/Modal";
+import { FaRegClock } from "react-icons/fa6";
+import { IoCalendarClear } from "react-icons/io5";
+import AppointmentInput from "../components/AppointmentInput";
 
 const meetings = [
   {
@@ -35,32 +40,32 @@ const meetings = [
     name: "Leslie Alexander",
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2024-08-11T13:00",
-    endDatetime: "2024-08-11T14:30",
+    startDatetime: "2024-09-21T13:00",
+    endDatetime: "2024-09-21T14:30",
   },
   {
     id: 2,
     name: "Michael Foster",
     imageUrl:
       "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2024-08-20T09:00",
-    endDatetime: "2024-08-20T11:30",
+    startDatetime: "2024-09-20T09:00",
+    endDatetime: "2024-09-20T11:30",
   },
   {
     id: 3,
     name: "Dries Vincent",
     imageUrl:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2024-08-20T17:00",
-    endDatetime: "2024-08-20T18:30",
+    startDatetime: "2024-09-20T17:00",
+    endDatetime: "2024-09-20T18:30",
   },
   {
     id: 4,
     name: "Leslie Alexander",
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    startDatetime: "2024-08-09T13:00",
-    endDatetime: "2024-08-09T14:30",
+    startDatetime: "2024-09-09T13:00",
+    endDatetime: "2024-09-09T14:30",
   },
   {
     id: 5,
@@ -76,19 +81,17 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const capitalizeFirstLetter = (string) => {
-  return string
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
-
 const Calendly = () => {
+  const { empresa: empresaParams } = useParams();
+  const { dentista: dentistaParams } = useParams();
+
   let today = startOfToday();
+
   let [selectedDay, setSelectedDay] = useState(today);
   let [showTimes, setShowTimes] = useState(false);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const [open, setOpen] = useState(false);
 
   let newDays = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -107,9 +110,9 @@ const Calendly = () => {
 
   const isCurrentMonth = isSameMonth(firstDayCurrentMonth, today);
 
-  let selectedDayMeetings = meetings.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), selectedDay)
-  );
+  // let selectedDayMeetings = meetings.filter((meeting) =>
+  //   isSameDay(parseISO(meeting.startDatetime), selectedDay)
+  // );
 
   function handleDateClick(day) {
     if (!isBefore(day, today)) {
@@ -118,7 +121,7 @@ const Calendly = () => {
     }
   }
 
-  const generateAvailableTimes = (intervalMInutes = 60) => {
+  const generateAvailableTimes = (intervalMInutes) => {
     let times = [];
     let startTime = setHours(selectedDay, 8);
     let endTime = setHours(selectedDay, 18);
@@ -132,7 +135,7 @@ const Calendly = () => {
     return times;
   };
 
-  const timeService = generateAvailableTimes(30);
+  const timeService = generateAvailableTimes(60);
 
   return (
     <div className="w-full bg-gradient-to-br from-white to-gray-200 py-14 px-6 flex items-center md:h-screen justify-center">
@@ -171,10 +174,8 @@ const Calendly = () => {
               <span className="sr-only">Previus Month</span>
               <FaChevronLeft className="w-5 h-5" aria-hidden="true" />
             </button>
-            <h3 className="flex font-semibold text-gray-900">
-              {capitalizeFirstLetter(
-                format(firstDayCurrentMonth, "MMMM yyyy", { locale: ptBR })
-              )}
+            <h3 className="flex font-semibold text-gray-900 capitalize">
+              {format(firstDayCurrentMonth, "MMMM yyyy", { locale: ptBR })}
             </h3>
             <button
               type="button"
@@ -225,11 +226,18 @@ const Calendly = () => {
                         !isToday(day) &&
                         !isSameMonth(day, today) &&
                         "text-gray-400",
-                      isEqual(day, selectedDay) && isToday(day) && "bg-indigo-500",
-                      isEqual(day, selectedDay) && !isToday(day) && "bg-brite-active",
-                      isPastDay ? "text-gray-300" : "hover:bg-blue-200 hover:text-white active:bg-brite-active",
+                      isEqual(day, selectedDay) &&
+                        isToday(day) &&
+                        "bg-indigo-500",
+                      isEqual(day, selectedDay) &&
+                        !isToday(day) &&
+                        "bg-brite-active",
+                      isPastDay
+                        ? "text-slate-300"
+                        : "hover:bg-blue-200 hover:text-white active:bg-brite-active",
                       // !isEqual(day, selectedDay) && "hover:bg-gray-200",
-                      (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+                      (isEqual(day, selectedDay) || isToday(day)) &&
+                        "font-semibold",
                       "mx-auto flex h-8 w-8 items-center justify-center rounded-full"
                     )}
                   >
@@ -270,24 +278,45 @@ const Calendly = () => {
         {showTimes && (
           <div className="">
             <section className="overflow-y-scroll h-[430px] px-4 md:flex md:flex-col mt-8 md:mt-0 md:pl-16">
-              <h2 className="font-semibold text-xl pb-4 text-gray-900">
-                {capitalizeFirstLetter(
-                  format(selectedDay, "EEEE, MMMM d", { locale: ptBR })
-                )}
-                {/* <time dateTime={format(selectedDay, "yyyy-MM-dd")}>
-                  {format(selectedDay, "MMM dd, yyyy")}
-                </time> */}
+              <h2 className="font-semibold text-xl pb-4 text-gray-900 capitalize">
+                {format(selectedDay, "EEEE, MMMM d", { locale: ptBR })}
               </h2>
               <div className="space-y-4">
                 {timeService.map((time, idx) => (
-                  <button
-                    key={idx}
-                    className="w-full py-2 font-semibold animated-background hover:bg-gradient-to-r hover:from-brite
-                      hover:via-indigo-400 hover:to-indigo-600 text-brite border-2 border-brite rounded-md text-lg
-                      hover:text-white focus:outline-none hover:border-transparent active:bg-indigo-950 active:text-gray-300 shadow-md"
-                  >
-                    {format(time, "HH:mm")}
-                  </button>
+                  <div>
+                    <button
+                      key={idx}
+                      className="w-full py-2 font-semibold animated-background hover:bg-gradient-to-r hover:from-brite
+                        hover:via-indigo-400 hover:to-indigo-600 text-brite border-2 border-brite rounded-md text-base
+                        hover:text-white focus:outline-none hover:border-transparent active:bg-indigo-950 active:text-gray-300"
+                      onClick={() => setOpen(true)}
+                    >
+                      {format(time, "HH:mm")}
+                    </button>
+
+                    <Modal open={open} onClose={() => setOpen(false)}>
+                      <div className="flex flex-col md:w-[650px] divide-y-2">
+                        <h1 className="text-2xl font-semibold pb-4">
+                          Confirmar agendamento:
+                        </h1>
+                        <h2 className="text-lg font-bold py-4 flex items-center gap-2">
+                          <FaRegClock /> 60 minutos{" "}
+                          <span className="text-gray-400 font-semibold">
+                            com
+                          </span>{" "}
+                          Dr Marcelo
+                        </h2>
+                        <p className="capitalize py-2 flex items-center gap-2">
+                          <IoCalendarClear className="text-gray-500" />{" "}
+                          {format(selectedDay, "EEEE, MMMM d", {
+                            locale: ptBR,
+                          })}
+                        </p>
+
+                        <AppointmentInput />
+                      </div>
+                    </Modal>
+                  </div>
                 ))}
               </div>
               {/* <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">

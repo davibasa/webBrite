@@ -56,6 +56,10 @@
   /*height: 60vh;  Adjust based on your design */
 }
 
+.iconForms {
+  background: linear-gradient(170deg, rgba(99, 99, 239, 1) 20%, rgba(99, 99, 239, 0.6) 80%);
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
