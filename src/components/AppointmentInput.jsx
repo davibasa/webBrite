@@ -147,15 +147,10 @@ const AppointmentInput = () => {
       <div className="flex items-center gap-4 justify-center">
         <button
           type="submit"
-          className="flex justify-center rounded-2xl bg-transparent border-2 border-red-500 px-4 md:px-10 py-1.5 text-sm font-semibold leading-6 shadow-md hover:bg-brite-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brite"
+          className="border px-8 md:px-20 py-2 bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
+            text-white shadow-lg rounded-2xl  text-sm md:text-base hover:border-transparent font-semibold active:text-gray-300"
         >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          className="flex justify-center rounded-2xl border-2 border-brite-hover px-4 md:px-10 py-1.5 text-sm font-semibold leading-6 shadow-md bg-brite text-white focus-visible:outline"
-        >
-          Agendar
+          Agendar Consulta
         </button>
       </div>
     </div>

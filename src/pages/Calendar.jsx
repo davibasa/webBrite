@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
   Menu,
@@ -92,6 +92,8 @@ const Calendly = () => {
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [open, setOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
+  // const [duration, setDuration] = useState(60);
 
   let newDays = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -129,7 +131,6 @@ const Calendly = () => {
 
     while (currentTime <= endTime) {
       times.push(currentTime);
-
       currentTime = add(currentTime, { minutes: intervalMInutes });
     }
     return times;
@@ -276,10 +277,10 @@ const Calendly = () => {
           </section> */}
 
         {showTimes && (
-          <div className="">
+          <div>
             <section className="overflow-y-scroll h-[430px] px-4 md:flex md:flex-col mt-8 md:mt-0 md:pl-16">
               <h2 className="font-semibold text-xl pb-4 text-gray-900 capitalize">
-                {format(selectedDay, "EEEE, MMMM d", { locale: ptBR })}
+                {format(selectedDay, "EEEE, d, MMMM", { locale: ptBR })}
               </h2>
               <div className="space-y-4">
                 {timeService.map((time, idx) => (
@@ -289,33 +290,38 @@ const Calendly = () => {
                       className="w-full py-2 font-semibold animated-background hover:bg-gradient-to-r hover:from-brite
                         hover:via-indigo-400 hover:to-indigo-600 text-brite border-2 border-brite rounded-md text-base
                         hover:text-white focus:outline-none hover:border-transparent active:bg-indigo-950 active:text-gray-300"
-                      onClick={() => setOpen(true)}
+                      onClick={() => {
+                        setSelectedTime(time);
+                        setOpen(true);
+                      }}
                     >
                       {format(time, "HH:mm")}
                     </button>
+                    {open && (
+                      <Modal open={open} onClose={() => setOpen(false)}>
+                        <div className="flex flex-col md:w-[650px] divide-y-2">
+                          <h1 className="text-2xl font-semibold pb-4">
+                            Confirmar agendamento:
+                          </h1>
+                          <h2 className="text-lg font-bold py-4 flex items-center gap-2">
+                            <FaRegClock /> 60 minutos{" "}
+                            <span className="text-gray-400 font-semibold">
+                              com
+                            </span>{" "}
+                            Dr Marcelo
+                          </h2>
+                          <p className="capitalize py-2 flex items-center gap-2">
+                            <IoCalendarClear className="text-gray-500" />{" "}
+                            {format(selectedTime, "HH:mm")},{" "}
+                            {format(selectedDay, "EEEE, d, MMMM", {
+                              locale: ptBR,
+                            })}
+                          </p>
 
-                    <Modal open={open} onClose={() => setOpen(false)}>
-                      <div className="flex flex-col md:w-[650px] divide-y-2">
-                        <h1 className="text-2xl font-semibold pb-4">
-                          Confirmar agendamento:
-                        </h1>
-                        <h2 className="text-lg font-bold py-4 flex items-center gap-2">
-                          <FaRegClock /> 60 minutos{" "}
-                          <span className="text-gray-400 font-semibold">
-                            com
-                          </span>{" "}
-                          Dr Marcelo
-                        </h2>
-                        <p className="capitalize py-2 flex items-center gap-2">
-                          <IoCalendarClear className="text-gray-500" />{" "}
-                          {format(selectedDay, "EEEE, MMMM d", {
-                            locale: ptBR,
-                          })}
-                        </p>
-
-                        <AppointmentInput />
-                      </div>
-                    </Modal>
+                          <AppointmentInput />
+                        </div>
+                      </Modal>
+                    )}
                   </div>
                 ))}
               </div>
