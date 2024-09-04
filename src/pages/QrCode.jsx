@@ -82,7 +82,7 @@ const QrCode = () => {
       <div className='md:max-w-[1400px] grid lg:grid-cols-2 m-auto max-w-[520px] lg:gap-44'>
         <div className="flex flex-col justify-center lg:justify-start">
           <h1 className='text-4xl md:text-6xl font-bold text-center lg:text-left'>Experimente a <span className='text-brite'>Tecnologia Inovadora </span> da <span className='text-brite'>Brite</span> Agora!</h1>
-          <h2 className='lg:w-[500px] py-6 md:py-8 md:text-xl font-semibold text-gray-400 text-center lg:text-left'>Abra o Whatsapp e escaneie o QR code e veja como nossa solução de IA automatiza o suporte ao paciente e os agendamentos via WhatsApp.</h2>
+          <h2 className='lg:w-[500px] py-6 md:py-8 md:text-xl font-semibold text-gray-400 text-center lg:text-left'>Coloque o nome da clínica abaixo, abra o Whatsapp, escaneie o QR code e use nossa solução que automatiza o suporte ao paciente e os agendamentos</h2>
           
           <div className="flex items-center flex-col md:flex-row lg:w-[500px] justify-center lg:justify-start gap-2 pb-4 md:pb-8">
             <div className='py-3 md:py-0'>
