@@ -14,8 +14,9 @@ import DebouncedInput from "./DebouncedInput";
 import { IoIosSearch } from "react-icons/io";
 import { TbArrowsSort } from "react-icons/tb";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
-import { format, isToday, isYesterday, parseISO } from "date-fns";
+import { add, format, isToday, isYesterday, parseISO } from "date-fns";
 import { GiPlainCircle } from "react-icons/gi";
+import { ptBR } from "date-fns/locale";
 
 const TanStackTable = () => {
   const [data, setData] = useState([]);
@@ -95,15 +96,17 @@ const TanStackTable = () => {
         );
         const fetchedData = response.data;
         const formattedData = fetchedData.map((item) => {
-          const lastMsgDate = parseISO(item.date_Last_Msg);
+          let lastMsgDate = parseISO(item.date_Last_Msg);
+          lastMsgDate = add(lastMsgDate, { hours: -3 });
           const isRecentMsg = isToday(lastMsgDate) || isYesterday(lastMsgDate);
+          
 
           return {
             name: item.contact,
             ddd: item.ddd,
             number: item.phone,
             lastMsg: lastMsgDate,
-            lastMsgFormatted: format(lastMsgDate, "dd/MM/yy - HH:mm"),
+            lastMsgFormatted: format(lastMsgDate, "dd/MM/yy - HH:mm", { locale: ptBR }),
             callAttendant: item.call_Attendant ? (
               <GiPlainCircle className="text-green-500" />
             ) : (
@@ -111,6 +114,8 @@ const TanStackTable = () => {
             ),
             isRecentMsg,
           };
+
+          
         });
 
         setData(formattedData);

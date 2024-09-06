@@ -97,7 +97,7 @@ const QrCode = () => {
                       required
                       placeholder='Ex de sessão: Clínica_1'
                       autoComplete="text"
-                      className={`block form-input w-full px-20 md:px-14 rounded-md border-0 shadow-sm ring-1 ring-inset placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none ${error ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500' : 'ring-gray-300 focus:ring-to-brite'}`}
+                      className={`block form-input w-full pr-20 md:pr-14 rounded-md border-0 shadow-sm ring-1 ring-inset placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none ${error ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500' : 'ring-gray-300 focus:ring-to-brite'}`}
                     />
                     {/* Exibe a mensagem de erro, se houver */}
                     {error && (
@@ -113,7 +113,7 @@ const QrCode = () => {
               onClick={createSessionForWhatsapp}
               disabled={isLoading || !session}
               className={`border px-28 bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
-              text-white shadow-2xl rounded-lg md:px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold ${isLoading || !session ? 'opacity-45 cursor-not-allowed' : ''}`}>
+              text-white shadow-2xl rounded-lg md:px-6 py-2 text-sm md:text-base hover:border-transparent font-semibold active:text-gray-200 ${isLoading || !session ? 'opacity-45 cursor-not-allowed' : ''}`}>
               {isLoading ? 'Carregando...' : 'Gerar QrCode'}
             </button>
 

@@ -133,7 +133,7 @@ const AppointmentInput = () => {
               <textarea
                 id="comment"
                 rows="3"
-                className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
+                className="px-0 resize-y w-full text-sm text-gray-900 border-0 caret-indigo-600 focus:ring-0 focus:outline-none"
                 placeholder="Anote aqui..."
               ></textarea>
             </div>
