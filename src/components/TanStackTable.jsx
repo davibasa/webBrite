@@ -12,10 +12,11 @@ import {
 import DownloadBtn from "./DownloadBtn";
 import DebouncedInput from "./DebouncedInput";
 import { IoIosSearch } from "react-icons/io";
-import { TbArrowsSort } from "react-icons/tb";
+import { TbArrowsSort, TbMessageCirclePlus } from "react-icons/tb";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
-import { add, format, isToday, isYesterday, parseISO } from "date-fns";
+import { FiPlusCircle } from "react-icons/fi";
 import { GiPlainCircle } from "react-icons/gi";
+import { add, format, isToday, isYesterday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 const TanStackTable = () => {
@@ -33,6 +34,28 @@ const TanStackTable = () => {
     //   header: "#",
     // }),
 
+    columnHelper.accessor("isRecentMsg", {
+      cell: (info) => (
+        <div className="flex justify-center h-full pl-6">
+          {/* Verifica se a mensagem é recente e aplica a cor correta ao ícone */}
+          <TbMessageCirclePlus
+            className={
+              info.row.original.isRecentMsg
+                ? "text-brite text-xl animate-custom-ping"
+                : "text-black"
+            }
+          />
+        </div>
+      ),
+      header: () => (
+        <div className="flex items-center gap-2">
+          <span>Novos</span>
+          <FiPlusCircle className="text-white text-xl" />
+        </div>
+      ),
+      enableSorting: false,
+    }),
+
     columnHelper.accessor("name", {
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Nome",
@@ -46,24 +69,20 @@ const TanStackTable = () => {
       header: "Número",
     }),
     columnHelper.accessor("lastMsgFormatted", {
-      cell: (info) => (
-        <span className={info.row.original.isRecentMsg ? "text-green-500" : ""}>
-          {info.getValue()}
-        </span>
-      ),
+      cell: (info) => <span>{info.getValue()}</span>,
       header: "Última Mensagem",
       sortingFn: (rowA, rowB) => {
         const dateA = rowA.original.lastMsg;
         const dateB = rowB.original.lastMsg;
-        return dateB - dateA; 
-      }
+        return dateB - dateA;
+      },
     }),
     columnHelper.accessor("callAttendant", {
       cell: (info) => (
         <div className="flex items-center justify-center h-full">
           {info.getValue()}
         </div>
-      ), 
+      ),
       header: "Chamou Atendente",
       enableSorting: false,
     }),
@@ -99,23 +118,22 @@ const TanStackTable = () => {
           let lastMsgDate = parseISO(item.date_Last_Msg);
           lastMsgDate = add(lastMsgDate, { hours: -3 });
           const isRecentMsg = isToday(lastMsgDate) || isYesterday(lastMsgDate);
-          
 
           return {
             name: item.contact,
             ddd: item.ddd,
             number: item.phone,
             lastMsg: lastMsgDate,
-            lastMsgFormatted: format(lastMsgDate, "dd/MM/yy - HH:mm", { locale: ptBR }),
+            lastMsgFormatted: format(lastMsgDate, "dd/MM/yy - HH:mm", {
+              locale: ptBR,
+            }),
             callAttendant: item.call_Attendant ? (
               <GiPlainCircle className="text-green-500" />
             ) : (
-              <GiPlainCircle className="text-red-500"/>
+              <GiPlainCircle className="text-red-500" />
             ),
             isRecentMsg,
           };
-
-          
         });
 
         setData(formattedData);
@@ -163,7 +181,7 @@ const TanStackTable = () => {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="font-semibold py-3">
+                  <th key={header.id} className="font-semibold py-3 pl-6">
                     <div className="flex items-center justify-center gap-2 h-full">
                       {flexRender(
                         header.column.columnDef.header,
@@ -195,7 +213,7 @@ const TanStackTable = () => {
                       key={cell.id}
                       className={`px-3.5 py-2.5 items-center justify-center ${
                         row.original.isRecentMsg
-                          ? "text-green-500 font-semibold"
+                          ? "text-gray-900 font-bold"
                           : "text-gray-600 font-medium"
                       }`}
                     >
