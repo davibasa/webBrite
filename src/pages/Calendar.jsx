@@ -216,6 +216,8 @@ const Calendly = () => {
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const [open, setOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
+  // const [duration, setDuration] = useState(60);
 
   // Definição dos métodos fornecidos:
 

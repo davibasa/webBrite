@@ -153,7 +153,7 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex w-full justify-center rounded-md bg-brite px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brite-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brite"
+                    className="flex w-full justify-center rounded-md bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline active:text-gray-300 focus-visible:outline-brite-active"
                   >
                     {loading ? "Entrando..." : "Entrar"}
                   </button>
