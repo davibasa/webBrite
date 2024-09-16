@@ -12,8 +12,8 @@ const App = () => {
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/" element={<MasterPublic />}>
-        {/* <Route path="/calendar/:empresa/:dentista" element={<Calendar />} /> */}
-        <Route path="/calendar" element={<Calendar />} />
+      <Route path="/calendar/:empresa/:dentista" element={<Calendar />} />
+        {/* <Route path="/calendar" element={<Calendar />} /> */}
       </Route>
 
       {/* Rotas protegidas */}

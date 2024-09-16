@@ -46,7 +46,7 @@ const TanStackTable = () => {
     }),
     columnHelper.accessor("lastMsgFormatted", {
       cell: (info) => (
-        <span className={info.row.original.isRecentMsg ? "text-green-500" : ""}>
+        <span className={info.row.original.isRecentMsg ? "text-blue-900" : ""}>
           {info.getValue()}
         </span>
       ),
@@ -190,7 +190,7 @@ const TanStackTable = () => {
                       key={cell.id}
                       className={`px-3.5 py-2.5 items-center justify-center ${
                         row.original.isRecentMsg
-                          ? "text-green-500 font-semibold"
+                          ? "text-blue-900 font-semibold"
                           : "text-gray-600 font-medium"
                       }`}
                     >
@@ -204,7 +204,7 @@ const TanStackTable = () => {
               ))
             ) : (
               <tr className="text-center h-32">
-                <td colSpan={12}>Nenhum resultado encontrado</td>
+                 <td colSpan={12}>Nenhum resultado encontrado</td>
               </tr>
             )}
           </tbody>
