@@ -69,7 +69,11 @@ const TanStackTable = () => {
       header: "Número",
     }),
     columnHelper.accessor("lastMsgFormatted", {
-      cell: (info) => <span>{info.getValue()}</span>,
+      cell: (info) => (
+        <span className={info.row.original.isRecentMsg ? "text-blue-900" : ""}>
+          {info.getValue()}
+        </span>
+      ),
       header: "Última Mensagem",
       sortingFn: (rowA, rowB) => {
         const dateA = rowA.original.lastMsg;
@@ -227,7 +231,7 @@ const TanStackTable = () => {
               ))
             ) : (
               <tr className="text-center h-32">
-                <td colSpan={12}>Nenhum resultado encontrado</td>
+                 <td colSpan={12}>Nenhum resultado encontrado</td>
               </tr>
             )}
           </tbody>

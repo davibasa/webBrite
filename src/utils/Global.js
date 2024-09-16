@@ -3,20 +3,21 @@ import { Buffer } from "buffer";
 
 class Global {
     // Propriedades estáticas para URLs da API
-    static Api = "https://apibrite.azurewebsites.net/api";
-    //static MinApi = "https://localhost:7142/minapi";
+    // static Api = "https://apibrite.azurewebsites.net/api";
+    static Api = "https://localhost:7273/api";
+    // static MinApi = "https://localhost:7142/minapi";
     static MinApi = "https://minimalapibrite.azurewebsites.net/minapi";
   
     // Método estático para adicionar cabeçalhos à requisição HTTP
     static async addHeaders(client, localStorage, parameters = {}) {
       try {
+        var claimValue;
+        console.log(parameters);
         const savedToken = await Global.readLocalStorage(localStorage, "tokenUsuario");
-  
         // Verificação adicional: garantir que o token não é nulo
         if (!savedToken || savedToken === "tokenUsuario") {
-          throw new Error("Token JWT não encontrado no localStorage");
+          console.log("Token JWT não encontrado no localStorage");
         }
-        console.log(savedToken);
 
         if (!client.defaults.headers) {
           client.defaults.headers = {};
@@ -25,22 +26,19 @@ class Global {
         if (!client.defaults.headers["Authorization"]) {
           client.defaults.headers["Authorization"] = `Bearer ${savedToken}`;
         }
-  
-        const claimValue = Global.getClaimFromToken(savedToken, "http://schemas.customclaims.com/hash");
+        // Verificação adicional: garantir que o token não é nulo
+        if (savedToken !== "tokenUsuario") {
+          claimValue = Global.getClaimFromToken(savedToken, "http://schemas.customclaims.com/hash");
+        }
   
         if (claimValue && !client.defaults.headers["tenant"]) {
           client.defaults.headers["tenant"] = claimValue;
         }
   
-        for (const [key, value] of Object.entries(parameters)) {
-          client.defaults.headers[key] = value;
-          // if (!client.headers.has(key)) {
-          //   client.headers.append(key, value);
-          // } else {
-          //   client.headers.delete(key);
-          //   client.headers.append(key, value);
-          // }
-        }
+        for (let key in parameters) {
+          console.log("entrou")
+          client.defaults.headers[key] = parameters[key];
+      }
   
         return true;
       } catch (error) {

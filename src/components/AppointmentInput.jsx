@@ -1,5 +1,59 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import genericService from "../services/genericService";
+
+export const scheduleAppointment = async (appointmentData) => {
+  const endpoint = '/appointments'; // Defina o endpoint correto de acordo com sua API
+  try {
+    // Preparando o payload de dados no formato esperado pela API
+    const data = {
+      Dentist_Id: appointmentData.dentistId,
+      Patient_Id: appointmentData.patientId,
+      Date: appointmentData.date, // Data em formato ISO, exemplo: '2024-09-10'
+      Hour: appointmentData.hour, // Hora em formato 'HH:mm:ss'
+      Duration: appointmentData.duration, // Duração em formato 'HH:mm:ss'
+      Description: appointmentData.description,
+    };
+
+    // Chamando o serviço POST com o endpoint e os dados
+    const response = await genericService.postRequest(endpoint, data);
+
+    // Retorna a resposta da API, ou trata conforme necessário
+    return response;
+  } catch (error) {
+    console.error('Erro ao agendar compromisso:', error.message);
+    throw error;
+  }
+};
+
+export const savePerson = async (personData) => {
+  const endpoint = '/People'; // Defina o endpoint correto da sua API
+  try {
+    // Faz a chamada POST para salvar a pessoa
+    const response = await genericService.postRequest(endpoint, personData);
+
+    // Retorna a resposta da API
+    return response;
+  } catch (error) {
+    console.error('Erro ao salvar pessoa:', error.message);
+    throw error;
+  }
+};
+
+// Função para verificar se a pessoa existe com base no número de telefone
+const checkPersonExists = async (phoneNumber) => {
+  const endpoint = `/PersonPhones/VerifyNumberExist`;
+  var response;
+  try {
+     response = await genericService.getRequest(endpoint, {}, {
+      phone: phoneNumber});
+      console.log(response)
+    return response; // Supondo que a API retorne uma lista de pessoas
+  } catch (error) {
+    console.error('Erro ao verificar se a pessoa existe:', response.message);
+    throw error;
+  }
+};
 
 const AppointmentInput = () => {
   const [name, setName] = useState("");
@@ -10,57 +64,107 @@ const AppointmentInput = () => {
   const [notes, setNotes] = useState("");
   const navigate = useNavigate();
 
+
+  const handlePhoneChange = (e) => {
+    let input = e.target.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+    let formattedNumber;
+
+    if (input.length > 10) {
+      // Formato para (99) 99999-9999
+      formattedNumber = `(${input.slice(0, 2)}) ${input.slice(2, 7)}-${input.slice(7, 11)}`;
+    } else if (input.length > 6) {
+      // Formato para (99) 9999-9999
+      formattedNumber = `(${input.slice(0, 2)}) ${input.slice(2, 6)}-${input.slice(6, 10)}`;
+    } else if (input.length > 2) {
+      // Formato parcial para (99) 9999
+      formattedNumber = `(${input.slice(0, 2)}) ${input.slice(2)}`;
+    } else {
+      // Apenas o DDD
+      formattedNumber = input;
+    }
+
+    setNumber(formattedNumber);
+    console.log(number);
+  };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     setLoading(true);
     setPopupMessage(null);
-
+  
     try {
-      // Verifica se todos os campos estão preenchidos
+      // Verifica se todos os campos obrigatórios estão preenchidos
       if (!name || !email || !number) {
         throw new Error("Preencha todos os campos obrigatórios.");
       }
-
-      // Autentica a empresa com o CNPJ
-      //   const resultadoEmpresa = await logarEmpresa(cnpj);
-      //   console.log(resultadoEmpresa);
-
-      // Verifica o sucesso da autenticação da empresa
-      //   if (!resultadoEmpresa.success) {
-      //     throw new Error(resultadoEmpresa?.message || "Erro ao logar empresa.");
-      //   }
-
-      console.log(email);
-      // Autentica o usuário com email e senha
-      //   const resultadoUsuario = await logarUsuario(
-      //     { user: email, password: password },
-      //     resultadoEmpresa.data
-      //   );
-
-      //   // Verifica o sucesso da autenticação do usuário
-      //   if (!resultadoUsuario.success) {
-      //     throw new Error(resultadoUsuario?.message || "Erro ao logar usuário.");
-      //   }
-
-      //   // Armazena tokens de autenticação em localStorage
-      //   localStorage.setItem("tokenEmpresa", resultadoEmpresa.data); // Token da empresa
-      //   localStorage.setItem("tokenUsuario", resultadoUsuario.data); // Token do usuário
-
-      // Redireciona para a página home após o login bem-sucedido
-      //   navigate("/home");
+      console.log(name, email, number)
+      // Formata o número de telefone para enviar apenas os dígitos
+      const formattedNumber = '55' + number.replace(/\D/g, '');
+  
+      // Verifica se o número da pessoa já existe no banco de dados
+      const personExists = await checkPersonExists(formattedNumber);
+      console.log(personExists)
+  
+      let personId;
+      if (personExists.data.pessoa_existe === 1) {
+        // Se a pessoa não existir, salve a pessoa no banco de dados
+        const personData = {
+          Type_Person: 'F', 
+          Created_At: new Date().toISOString(),
+          Updated_At: new Date().toISOString(),
+          Active: true,
+          PersonInfos: {
+            Name: name,
+          },
+          PersonPhones: [
+            {
+              Type_Phone: 'Mobile',
+              Contact: name,
+              DDD: parseInt(formattedNumber.slice(0, 2), 10), // Extrai DDD dos primeiros 2 dígitos
+              Phone: formattedNumber,
+              Date_Last_Msg: new Date().toISOString(),
+              Call_Attendant: false,
+            },
+          ],
+        };
+        console.log('PersonData:', personData);
+        const savedPerson = await savePerson(personData);
+        personId = savedPerson.id; // Supondo que a API retorne o ID da pessoa criada
+      } else {
+        // Se a pessoa já existir, utilize o ID retornado
+        personId = personExists.data.id_pessoa;
+      }
+  
+      console.log(personId);
+      // Dados para o agendamento
+      const appointmentData = {
+        dentistId: 1, // Ajuste conforme necessário
+        patientId: personId, // Usa o ID da pessoa existente ou recém-criada
+        date: '2024-09-10', // Você pode substituir isso por um valor dinâmico
+        hour: '10:00:00', // Idem
+        duration: '00:30:00', // Idem, ajustar conforme necessário
+        description: popupMessage, // Você pode substituir por um campo dinâmico de formulário
+      };
+  
+      // Faz a chamada ao serviço de agendamento
+      const result = await scheduleAppointment(appointmentData);
+  
+      // Sucesso ao agendar o compromisso
+      console.log('Compromisso agendado com sucesso:', result);
+  
+      // Redirecionar ou atualizar o estado conforme necessário após sucesso
+      // navigate('/home'); //ou qualquer outra ação
+  
     } catch (error) {
       // Verifica se é um erro de rede
-      if (error.name === "TypeError") {
-        console.log("t1");
+      if (error.name === 'TypeError') {
         setPopupMessage(
-          "Erro de conexão. Verifique sua internet e tente novamente."
+          'Erro de conexão. Verifique sua internet e tente novamente.'
         );
       } else {
-        console.log("t2");
-        console.log(error);
         // Exibe mensagens de erro mais detalhadas
         setPopupMessage(
-          error.message || "Erro inesperado. Por favor, tente novamente."
+          error.message || 'Erro inesperado. Por favor, tente novamente.'
         );
       }
     } finally {
@@ -68,6 +172,7 @@ const AppointmentInput = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="w-full pt-6">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -117,7 +222,7 @@ const AppointmentInput = () => {
                 type="text"
                 required
                 value={number}
-                onChange={(e) => setNumber(e.target.value)}
+                onChange={handlePhoneChange}
                 autoComplete="current-number"
                 className="block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -150,7 +255,15 @@ const AppointmentInput = () => {
           className="border px-8 md:px-20 py-2 bg-brite animated-background hover:bg-gradient-to-r hover:from-[#6363EF] hover:via-indigo-400 hover:to-indigo-600 focus:outline-none
             text-white shadow-lg rounded-2xl  text-sm md:text-base hover:border-transparent font-semibold active:text-gray-300"
         >
-          Agendar Consulta
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          className="flex justify-center rounded-2xl border-2 border-brite-hover px-4 md:px-10 py-1.5 text-sm font-semibold leading-6 shadow-md bg-brite text-white focus-visible:outline"
+          onSubmit={handleSubmit}
+          onClick={handleSubmit}
+        >
+          Agendar
         </button>
       </div>
     </div>

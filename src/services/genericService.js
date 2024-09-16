@@ -7,37 +7,41 @@ class GenericService {
             baseURL,
             timeout,
         });
-    };
+    }
 
-    async getRequest(endpoint, params = {}, headersParams = {}) {
+    async getRequest(endpoint, params = {}, headersParams = {}, api = Global.Api) {
+        var response;
         try {
+            console.log(endpoint)
             await Global.addHeaders(this.client, window.localStorage, headersParams);
-            const response = await this.client.get(Global.Api + endpoint, { params });
+            response = await this.client.get(api + endpoint, { params });
             return response.data;
         } catch (error) {
-            throw new Error(`GET request failed: ${error.message}`);
+            throw new Error(`GET request failed: ${error.message} | Response: ${response.message}`);
         }
-    };
+    }
     
-    async postRequest(endpoint, data, headersParams = {}) {
+    async postRequest(endpoint, data, headersParams = {}, api = Global.Api) {
+        var response;
         try {
             await Global.addHeaders(this.client, window.localStorage, headersParams);
-            const response = await this.client.post(Global.Api + endpoint, data);
+            response = await this.client.post(api + endpoint, data);
             return response.data;
         } catch (error) {
-            throw new Error(`POST request failed: ${error.message}`);
+            throw new Error(`POST request failed: ${error.message} | Response: ${response.message}`);
         }
-    };
+    }
     
-    async deleteRequest(endpoint, headersParams = {}) {
+    async deleteRequest(endpoint, headersParams = {}, api = Global.Api) {
+        var response;
         try {
             await Global.addHeaders(this.client, window.localStorage, headersParams);
-            const response = await this.client.delete(Global.Api + endpoint);
+            response = await this.client.delete(api + endpoint);
             return response.data;
         } catch (error) {
-            throw new Error(`Delete request failed: ${error.message}`);
+            throw new Error(`Delete request failed: ${error.message} | Response: ${response.message}`);
         }
-    };
+    }
 }
 
 export default new GenericService(Global.Api);
